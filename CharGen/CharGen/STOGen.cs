@@ -80,12 +80,121 @@ namespace CharGen
             }
         }
 
-        public void randomCharacter()
+        public void randomCharacter() // Random faction
         {
             // Randomize faction
             randomValue = rand.Next(5);
             int faction = randomValue; // Will be used for ship selection
             character.faction = factions[randomValue];
+
+            // Randomize character class
+            randomValue = rand.Next(3);
+            character.charClass = charClasses[randomValue];
+
+            // Determine which faction's ships
+            int numShips;
+            try
+            {
+                switch (faction)
+                {
+                    // Federation ships
+                    case 0:
+                    case 4:
+                        numShips = populateShipClasses('F');
+                        break;
+                    // Klingon ships
+                    case 1:
+                        numShips = populateShipClasses('K');
+                        break;
+                    // Romulan ships
+                    case 2:
+                    case 3:
+                        numShips = populateShipClasses('R');
+                        break;
+                    default:
+                        throw new Exception();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot select ship faction: Faction number outside range.");
+                return;
+            }
+
+            // Randomize ship class
+            randomValue = rand.Next(numShips);
+            character.shipClass = shipClasses[randomValue];
+        }
+
+        public void randomCharacter(char alignment) // Specific alignment.  F for Fed, K for KDF
+        {
+            // Randomize faction within alignment
+            if (alignment == 'F') // Fed alignment
+            {
+                do
+                {
+                    randomValue = rand.Next(5);
+                } while (randomValue != 0 && randomValue != 2 && randomValue != 4); // Throw away values that lead to KDF alignment
+            }
+            else if(alignment == 'K') // KDF alignment
+            {
+                do
+                {
+                    randomValue = rand.Next(5);
+                } while (randomValue != 1 && randomValue != 3); // Throw away values that lead to Fed alignment
+            }
+            else
+            {
+                Console.WriteLine("Invalid alignment.");
+                return;
+            }
+
+            int faction = randomValue; // Will be used for ship selection
+            character.faction = factions[randomValue];
+
+            // Randomize character class
+            randomValue = rand.Next(3);
+            character.charClass = charClasses[randomValue];
+
+            // Determine which faction's ships
+            int numShips;
+            try
+            {
+                switch (faction)
+                {
+                    // Federation ships
+                    case 0:
+                    case 4:
+                        numShips = populateShipClasses('F');
+                        break;
+                    // Klingon ships
+                    case 1:
+                        numShips = populateShipClasses('K');
+                        break;
+                    // Romulan ships
+                    case 2:
+                    case 3:
+                        numShips = populateShipClasses('R');
+                        break;
+                    default:
+                        throw new Exception();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot select ship faction: Faction number outside range.");
+                return;
+            }
+
+            // Randomize ship class
+            randomValue = rand.Next(numShips);
+            character.shipClass = shipClasses[randomValue];
+        }
+
+        public void randomCharacter(int factionPicked) // Specific faction.
+        {
+            int faction = factionPicked; // Will be used for ship selection
+            character.faction = factions[factionPicked];
 
             // Randomize character class
             randomValue = rand.Next(3);
