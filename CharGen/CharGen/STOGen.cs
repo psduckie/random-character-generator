@@ -10,6 +10,7 @@ namespace CharGen
     {
         // Declare the arrays
         private String[] factions;
+        private String[] races;
         private String[] charClasses;
         private String[] shipClasses;
 
@@ -27,6 +28,7 @@ namespace CharGen
 
             // Declare the arrays
             factions = new String[5];
+            races = new String[13];
             charClasses = new String[3];
             shipClasses = new String[3];
 
@@ -80,6 +82,88 @@ namespace CharGen
             }
         }
 
+        public int populateRaces(int faction) // Int value corresponds to the factions array.  Returns the number of possible races, NOT counting C-Store or Lifetime races, or the Alien race.
+        {
+            try
+            {
+                switch(faction)
+                {
+                    case 0: // Federation
+                        races[0] = "Andorian";
+                        races[1] = "Bajoran";
+                        races[2] = "Benzite";
+                        races[3] = "Betazoid";
+                        races[4] = "Bolian";
+                        races[5] = "Ferengi";
+                        races[6] = "Human";
+                        races[7] = "Pakled";
+                        races[8] = "Rigelian";
+                        races[9] = "Saurian";
+                        races[10] = "Tellarite";
+                        races[11] = "Trill";
+                        races[12] = "Vulcan";
+                        return 13;
+                    case 1: // KDF
+                        races[0] = "Gorn";
+                        races[1] = "Klingon";
+                        races[2] = "Lethean";
+                        races[3] = "Nausicaan";
+                        races[4] = "Orion";
+                        // Only five races available to KDF
+                        races[5] = null;
+                        races[6] = null;
+                        races[7] = null;
+                        races[8] = null;
+                        races[9] = null;
+                        races[10] = null;
+                        races[11] = null;
+                        races[12] = null;
+                        return 5;
+                    case 2:
+                    case 3: // Romulans
+                        races[0] = "Romulan";
+                        // Only Romulans available
+                        races[1] = null;
+                        races[2] = null;
+                        races[3] = null;
+                        races[4] = null;
+                        races[5] = null;
+                        races[6] = null;
+                        races[7] = null;
+                        races[8] = null;
+                        races[9] = null;
+                        races[10] = null;
+                        races[11] = null;
+                        races[12] = null;
+                        return 1;
+                    case 4: // TOS Federation
+                        races[0] = "23c Human";
+                        races[1] = "23c Andorian";
+                        races[2] = "23c Tellarite";
+                        races[3] = "23c Vulcan";
+                        // Only four races available to TOS Federation
+                        races[4] = null;
+                        races[5] = null;
+                        races[6] = null;
+                        races[7] = null;
+                        races[8] = null;
+                        races[9] = null;
+                        races[10] = null;
+                        races[11] = null;
+                        races[12] = null;
+                        return 4;
+                    default:
+                        throw new Exception();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Cannot populate ship classes: Not a valid faction.");
+                return -1;
+            }
+
+        }
+
         public void randomCharacter() // Random faction
         {
             // Randomize faction
@@ -90,6 +174,14 @@ namespace CharGen
             // Randomize character class
             randomValue = rand.Next(3);
             character.charClass = charClasses[randomValue];
+
+            // Determine which faction's races
+            int numRaces;
+            numRaces = populateRaces(faction);
+
+            // Randomize race
+            randomValue = rand.Next(numRaces);
+            character.race = races[randomValue];
 
             // Determine which faction's ships
             int numShips;
@@ -152,6 +244,14 @@ namespace CharGen
             int faction = randomValue; // Will be used for ship selection
             character.faction = factions[randomValue];
 
+            // Determine which faction's races
+            int numRaces;
+            numRaces = populateRaces(faction);
+
+            // Randomize race
+            randomValue = rand.Next(numRaces);
+            character.race = races[randomValue];
+            
             // Randomize character class
             randomValue = rand.Next(3);
             character.charClass = charClasses[randomValue];
@@ -196,6 +296,14 @@ namespace CharGen
             int faction = factionPicked; // Will be used for ship selection
             character.faction = factions[factionPicked];
 
+            // Determine which faction's races
+            int numRaces;
+            numRaces = populateRaces(faction);
+
+            // Randomize race
+            randomValue = rand.Next(numRaces);
+            character.race = races[randomValue];
+            
             // Randomize character class
             randomValue = rand.Next(3);
             character.charClass = charClasses[randomValue];

@@ -34,6 +34,7 @@ namespace CharGen
                 generator.randomCharacter(cboFactionPick.SelectedIndex);
 
             lblFaction.Text = generator.character.faction;
+            lblRace.Text = generator.character.race;
             lblShip.Text = generator.character.shipClass;
             lblClass.Text = generator.character.charClass;
         }
