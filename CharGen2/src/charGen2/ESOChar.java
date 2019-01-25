@@ -4,6 +4,8 @@ public class ESOChar {
 	private String faction;
 	private String charClass;
 	private String race;
+	private String gender;
+	
 	public String getFaction() {
 		return faction;
 	}
@@ -21,5 +23,11 @@ public class ESOChar {
 	}
 	public void setRace(String race) {
 		this.race = race;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 }

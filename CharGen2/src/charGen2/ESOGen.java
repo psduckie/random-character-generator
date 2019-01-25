@@ -164,6 +164,15 @@ public class ESOGen {
 	
 	public void randomCharacter()
 	{
+		// Randomize gender
+		randomValue = rand.nextInt(2);
+		if(randomValue == 0) {
+			character.setGender("Male");
+		}
+		else {
+			character.setGender("Female");
+		}
+		
 		// Randomize faction
 		randomValue = rand.nextInt(3);
 		int faction = randomValue; // Will be used for race selection
@@ -209,6 +218,7 @@ public class ESOGen {
 	public void printCharacter()
 	{
 		System.out.println("ESO character generated.");
+		System.out.println("Gender: " + character.getGender());
 		System.out.println("Faction: " + character.getFaction());
 		System.out.println("Race: " + character.getRace());
 		System.out.println("Class: " + character.getCharClass());
