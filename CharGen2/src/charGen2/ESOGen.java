@@ -144,8 +144,6 @@ public class ESOGen {
 	
 	public int populateClasses()
 	{
-		int numClasses;
-		
 		charClasses[0] = "Dragonknight";
 		charClasses[1] = "Sorcerer";
 		charClasses[2] = "Templar";
@@ -153,13 +151,11 @@ public class ESOGen {
 		
 		if(morrowind) {
 			charClasses[4] = "Warden";
-			numClasses = 5;
+			return 5;
 		}
 		else {
-			numClasses = 4;
+			return 4;
 		}
-		
-		return numClasses;
 	}
 	
 	public void randomCharacter()
@@ -210,7 +206,7 @@ public class ESOGen {
 			return;
 		}
 		
-		// Randomize ship class
+		// Randomize race
 		randomValue = rand.nextInt(numRaces);
 		character.setRace(races[randomValue]);		
 	}
