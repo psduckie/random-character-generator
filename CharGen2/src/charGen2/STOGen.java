@@ -18,6 +18,7 @@ public class STOGen {
 	private int zen;
 	private boolean lifetime;
 	private boolean reman;
+	private String side;
 	
 	public boolean isDominion() {
 		return dominion;
@@ -77,23 +78,52 @@ public class STOGen {
 		character = new STOChar();
 	}
 	
-	public int populateFactions()
+	public int populateFactions(String side)
 	{
-		factions[0] = "Federation";
-		factions[1] = "Klingon";
-		factions[2] = "Romulan (Federation aligned)";
-		factions[3] = "Romulan (Klingon aligned)";
-		factions[4] = "TOS Federation";
-		factions[5] = "DSC Federation";
+		if(side == "Fed") {
+			factions[0] = "Federation";
+			factions[1] = "Romulan (Federation aligned)";
+			factions[2] = "TOS Federation";
+			factions[3] = "DSC Federation";
 		
-		if(dominion) {
-			factions[6] = "Dominion (Federation aligned)";
-			factions[7] = "Dominion (Klingon aligned)";
-			return 8;
+			if(dominion) {
+				factions[4] = "Dominion (Federation aligned)";
+				return 5;
+			}
+			else {
+				return 4;
+			}
+		}
+		else if(side == "KDF") {
+			factions[0] = "Klingon";
+			factions[1] = "Romulan (Klingon aligned)";
+		
+			if(dominion) {
+				factions[2] = "Dominion (Klingon aligned)";
+				return 3;
+			}
+			else {
+				return 2;
+			}
 		}
 		else {
-			return 6;
+			factions[0] = "Federation";
+			factions[1] = "Klingon";
+			factions[2] = "Romulan (Federation aligned)";
+			factions[3] = "Romulan (Klingon aligned)";
+			factions[4] = "TOS Federation";
+			factions[5] = "DSC Federation";
+		
+			if(dominion) {
+				factions[6] = "Dominion (Federation aligned)";
+				factions[7] = "Dominion (Klingon aligned)";
+				return 8;
+			}
+			else {
+				return 6;
+			}
 		}
+
 	}
 	
 	public int populateShipClasses(String faction) // F for Fed, K for KDF, R for Romulan, D for Dominion.  Returns the number of possible classes that have ships from T2 and up.
@@ -226,12 +256,12 @@ public class STOGen {
 	public void randomCharacter()
 	{
 		// Randomize faction
-		randomValue = rand.nextInt(5);
-		int faction = randomValue; // Will be used for ship selection
+		int numFactions = populateFactions(side);
+		randomValue = rand.nextInt(numFactions);
 		character.setFaction(factions[randomValue]);
 		
 		// Randomize gender
-		if(faction == 6 || faction == 7) {
+		if(character.getFaction().startsWith("Dominion")) {
 			character.setGender("Male"); // Dominion characters are always male
 		}
 		else {
@@ -251,32 +281,32 @@ public class STOGen {
 		// Determine each faction's races
 		int numRaces;
 		try {
-			switch(faction)
+			switch(character.getFaction())
 			{
 			// Fed
-			case 0:
+			case "Federation":
 				numRaces = populateRaces("Fed");
 				break;
 			// KDF
-			case 1:
+			case "Klingon":
 				numRaces = populateRaces("KDF");
 				break;
 			// Romulan
-			case 2:
-			case 3:
+			case "Romulan (Federation aligned)":
+			case "Romulan (Klingon aligned)":
 				numRaces = populateRaces("Rom");
 				break;
 			// TOS
-			case 4:
+			case "TOS Federation":
 				numRaces = populateRaces("TOS");
 				break;
 			// DSC
-			case 5:
+			case "DSC Federation":
 				numRaces = populateRaces("DSC");
 				break;
 			// Dominion
-			case 6:
-			case 7:
+			case "Dominion (Federation aligned)":
+			case "Dominion (Klingon aligned)":
 				numRaces = populateRaces("Dom");
 				break;
 			default:
@@ -297,25 +327,26 @@ public class STOGen {
 		// Determine which faction's ships
 		int numShips;
 		try{
-			switch(faction)
+			switch(character.getFaction())
 			{
 			// Federation ships
-			case 0:
-			case 4:
-			case 5:
+			case "Federation":
+			case "TOS Federation":
+			case "DSC Federation":
 				numShips = populateShipClasses("Fed");
 				break;
 			// Klingon ships
-			case 1:
+			case "Klingon":
 				numShips = populateShipClasses("KDF");
 				break;
 			// Romulan ships
-			case 2:
-			case 3:
+			case "Romulan (Federation aligned)":
+			case "Romulan (Klingon aligned)":
 				numShips = populateShipClasses("Rom");
 				break;
-			case 6:
-			case 7:
+			// Dominion ships
+			case "Dominion (Federation aligned)":
+			case "Dominion (Klingon aligned)":
 				numShips = populateShipClasses("Dom");
 				break;
 			default:
@@ -438,9 +469,45 @@ public class STOGen {
 		}
 		
 		try {
+			do {
+				System.out.println();
+				System.out.print("Do you want to include (F)ederation-side characters, (K)lingon-side characters, or (B)oth? ");
+				input = (char) System.in.read();
+				switch(input)
+				{
+				case 'F':
+				case 'f':
+					side = "Fed";
+					properInput = true;
+					break;
+				case 'K':
+				case 'k':
+					side = "KDF";
+					properInput = true;
+					break;
+				case 'B':
+				case 'b':
+					side = "All";
+					properInput = true;
+					break;
+				default:
+					System.out.println();
+					System.out.println("Invalid character.");
+					properInput = false;
+					break;
+				}
+			} while(properInput == false);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error reading keypress.");
+		}
+		
+		
+		try {
 			System.out.println();
 			System.out.print("What is the maximum number of ZEN you would be willing to spend to unlock a character race? ");
-			zen = (int) System.in.read();
+			zen = System.in.read();
 		}
 		catch(Exception e)
 		{
