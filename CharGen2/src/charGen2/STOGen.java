@@ -507,25 +507,14 @@ public class STOGen {
 		try {
 			System.out.println();
 			System.out.print("What is the maximum number of ZEN you would be willing to spend to unlock a character race? ");
-			zen = System.in.read();
+			zen = (int)System.in.read();
 		}
 		catch(Exception e)
 		{
-			System.out.println("Error reading keypress.");
+			System.out.println("Error reading amount.");
 		}
 
 
-		System.out.println();
-		try{
-			System.out.print("Press any key to generate STO character: ");
-			System.in.read();
-			System.out.println();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Error reading keypress.");
-		}
-		
 		randomCharacter();
 		printCharacter();
 	}
